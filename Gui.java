@@ -13,6 +13,9 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     private JButton b1,b2,b3,b4,b5,b6,b7;
     private boolean turn = true;
 
+    public int[][] getBoard() {
+	return board;
+    }
     
     private class myKeyListener implements KeyListener {
 	public void keyPressed(KeyEvent e) {
