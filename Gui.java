@@ -6,12 +6,14 @@ import java.io.*;
 public class Gui extends JFrame implements ActionListener {  //this code began as the sample gui code. Thanks, Mr. Z!
     
     private Container pane;
-    private JButton exitButton;
+    private JButton exitButton,aiToggle;
     private JPanel buttonsBorder,boardBorder;
     private int[][] board = new int[6][7];
     private Container buttons,buttons2;
     private JButton b1,b2,b3,b4,b5,b6,b7;
     private boolean turn = true;
+    private boolean useAi = false;
+    private JLabel singlePlayer,gameInfo;
 
     public int[][] getBoard() {
 	return board;
@@ -34,7 +36,15 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     public void actionPerformed(ActionEvent e) {	
 	if (e.getSource() == exitButton) {
 	    System.exit(0);
-	}else{
+	}
+	else if (e.getSource() == aiToggle) {
+	    useAi = !useAi;
+	    if (useAi) 
+		this.singlePlayer.setText("Singleplayer ON");
+	    else
+		this.singlePlayer.setText("Singleplayer OFF");
+	}
+	else{
 	    buttonAct(e.getSource(), ((JButton) e.getSource()).getText());
 	    boardBorder.removeAll();
 	    for (int i=board.length-1;i>=0;i--) {
@@ -68,31 +78,35 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	    if (board[i][x] == 0){
 		if (turn){
 		    board[i][x] = 1;
+		    this.gameInfo.setText("Black to Play");
 		    done = true;
 		}
 		else{
 		    board[i][x] = 2;
+		    this.gameInfo.setText("Red to Play");
 		    done = true;
 		}
 	    }
 	    else
 		i++;
 	}
-	if (done)
+	if (done) {
 	    turn = !turn;
+	}
 	else
 	    System.out.println("Invalid move. Column full.");
     }
     
     public Gui() {
 	this.setTitle("My first GUI");
-	this.setSize(700,700);
+	this.setSize(725,725);
 	this.setLocation(0,0);
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	
 	pane = this.getContentPane();
 	pane.setLayout(new BorderLayout());
 	exitButton = new JButton("Exit");
+	aiToggle = new JButton("Toggle Singleplayer");
 	boardBorder = new JPanel();
 	boardBorder.setBorder(BorderFactory.createLineBorder(Color.yellow,5));
 	boardBorder.setLayout(new GridLayout(6,7));
@@ -104,9 +118,14 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	b5= new JButton("5");
 	b6= new JButton("6");
 	b7= new JButton("7");
+	singlePlayer = new JLabel("Singleplayer OFF");
+	gameInfo = new JLabel("Red to Play");
 	buttons = new Container();
-	buttons.setLayout(new GridLayout(1,1));
+	buttons.setLayout(new GridLayout(1,4));
 	buttons.add(exitButton);
+	buttons.add(gameInfo);
+	buttons.add(singlePlayer);
+	buttons.add(aiToggle);
 	buttonsBorder = new JPanel();
 	buttonsBorder.setBorder(BorderFactory.createLineBorder(Color.blue,5));
 	buttonsBorder.setLayout(new GridLayout(1,1));
@@ -133,6 +152,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	}
 	
 	exitButton.addActionListener(this);
+	aiToggle.addActionListener(this);
 	b1.addActionListener(this);
 	b2.addActionListener(this);
 	b3.addActionListener(this);
