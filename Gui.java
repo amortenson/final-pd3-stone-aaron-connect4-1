@@ -1,12 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
-public class Gui extends JFrame implements ActionListener {
+public class Gui extends JFrame implements ActionListener {  //this code began as the sample gui code. Thanks, Mr. Z!
     
     private Container pane;
     private JButton exitButton;
-    private JPanel canvas, buttonsBorder;
+    private JPanel buttonsBorder,boardBorder;
     private int[][] board = new int[6][7];
     private Container buttons,buttons2;
     private JButton b1,b2,b3,b4,b5,b6,b7;
@@ -23,7 +24,7 @@ public class Gui extends JFrame implements ActionListener {
 	    System.out.println("potato");
 	}
 	public void keyReleased(KeyEvent e) {
-	    System.out.println("RELEASED: " + e.getKeyChar()+ " - "+ e.getKeyCode());
+	    System.out.println("pə-tāʹtō");
 	}
     }
 	
@@ -32,10 +33,24 @@ public class Gui extends JFrame implements ActionListener {
 	    System.exit(0);
 	}else{
 	    buttonAct(e.getSource(), ((JButton) e.getSource()).getText());
+	    boardBorder.removeAll();
+	    for (int i=board.length-1;i>=0;i--) {
+		for (int j=0;j<board[i].length;j++) {
+		    JPanel jpanel = new JPanel();
+		    jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
+		    if (board[i][j] == 1)
+			jpanel.setBackground(Color.red);
+		    else  if (board[i][j] == 2)
+			jpanel.setBackground(Color.black);
+		    else
+			jpanel.setBackground(Color.blue);
+		    boardBorder.add(jpanel);
+		}
+	    }
+	    pane.revalidate();
 	}
     }
-	
-	
+		
     public void buttonAct(Object jb, String t){
 	int p;
 	if (turn)
@@ -43,7 +58,7 @@ public class Gui extends JFrame implements ActionListener {
 	else
 	    p = 2;
 	System.out.println("player " + p + " picked column " + t);
-	int x = Integer.parseInt(t);
+	int x = Integer.parseInt(t)-1;
 	int i = 0;
 	boolean done = false;
 	while (i < 6 && !done){
@@ -75,9 +90,9 @@ public class Gui extends JFrame implements ActionListener {
 	pane = this.getContentPane();
 	pane.setLayout(new BorderLayout());
 	exitButton = new JButton("Exit");
-	canvas = new JPanel();
-	canvas.setBorder(BorderFactory.createLineBorder(Color.blue,5));
-	canvas.setLayout(new GridLayout(6,7));
+	boardBorder = new JPanel();
+	boardBorder.setBorder(BorderFactory.createLineBorder(Color.yellow,5));
+	boardBorder.setLayout(new GridLayout(6,7));
 	board = new int[6][7];
 	b1= new JButton("1");
 	b2= new JButton("2");
@@ -103,13 +118,14 @@ public class Gui extends JFrame implements ActionListener {
 	buttons2.add(b7);
 	buttonsBorder.add(buttons2);
 	pane.add(buttons,BorderLayout.PAGE_START);
-	pane.add(canvas,BorderLayout.CENTER);
+	pane.add(boardBorder,BorderLayout.CENTER);
 	pane.add(buttonsBorder,BorderLayout.PAGE_END);
 	for (int[] panels:board) {
 	    for (int panel:panels) {
 		JPanel jpanel = new JPanel();
-		jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));		
-		canvas.add(jpanel);
+		jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
+		jpanel.setBackground(Color.blue);
+		boardBorder.add(jpanel);
 	    }
 	}
 	
@@ -129,4 +145,5 @@ public class Gui extends JFrame implements ActionListener {
     }
     
 }
+
 
