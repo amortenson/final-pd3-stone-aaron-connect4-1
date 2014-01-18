@@ -24,7 +24,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	    System.out.println("potato");
 	}
 	public void keyReleased(KeyEvent e) {
-	    System.out.println("pə-tāʹtō");
+	    System.out.println("potato");
 	}
     }
 	
