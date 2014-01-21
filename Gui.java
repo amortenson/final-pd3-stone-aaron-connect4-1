@@ -15,8 +15,12 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     private boolean useAi = false;
     private JLabel singlePlayer,gameInfo;
 
-    public int[][] getBoard() {
-	return board;
+    public void changeTurn() {
+	turn = !turn;
+	if (turn)
+	    this.gameInfo.setText("Red to Play");
+	else
+	    this.gameInfo.setText("Black to Play");
     }
     
     private class myKeyListener implements KeyListener {
@@ -46,24 +50,27 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	}
 	else{
 	    buttonAct(e.getSource(), ((JButton) e.getSource()).getText());
-	    boardBorder.removeAll();
-	    for (int i=board.length-1;i>=0;i--) {
-		for (int j=0;j<board[i].length;j++) {
-		    JPanel jpanel = new JPanel();
-		    jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
-		    if (board[i][j] == 1)
-			jpanel.setBackground(Color.red);
-		    else  if (board[i][j] == 2)
-			jpanel.setBackground(Color.black);
-		    else
-			jpanel.setBackground(Color.blue);
-		    boardBorder.add(jpanel);
-		}
-	    }
-	    pane.revalidate();
 	}
     }
-		
+
+    public void updateBoard() {
+	boardBorder.removeAll();
+	for (int i=board.length-1;i>=0;i--) {
+	    for (int j=0;j<board[i].length;j++) {
+		JPanel jpanel = new JPanel();
+		jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
+		if (board[i][j] == 1)
+		    jpanel.setBackground(Color.red);
+		else  if (board[i][j] == 2)
+		    jpanel.setBackground(Color.black);
+		else
+		    jpanel.setBackground(Color.blue);
+		boardBorder.add(jpanel);
+	    }
+	}
+	pane.revalidate();
+    }
+    
     public void buttonAct(Object jb, String t){
 	int p;
 	if (turn)
@@ -78,12 +85,10 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	    if (board[i][x] == 0){
 		if (turn){
 		    board[i][x] = 1;
-		    this.gameInfo.setText("Black to Play");
 		    done = true;
 		}
 		else{
 		    board[i][x] = 2;
-		    this.gameInfo.setText("Red to Play");
 		    done = true;
 		}
 	    }
@@ -91,7 +96,14 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 		i++;
 	}
 	if (done) {
-	    turn = !turn;
+	    changeTurn();
+	    updateBoard();
+	    if (useAi) {
+		Ai a =new Ai(board,turn);
+		board =a.dummy();
+		changeTurn();
+		updateBoard();
+	    }
 	}
 	else
 	    System.out.println("Invalid move. Column full.");
