@@ -18,14 +18,14 @@ public class Ai {
 	}
     }
 
-    public void test() {
+    /*public void test() {
         for (int i=board.length-1;i>=0;i--) {
             for (int j=0;j<board[i].length;j++) {
                 System.out.print(board[i][j]);
             }
             System.out.println("");
         }
-    }
+	}*/
 
     public int[][] dummy() {
         boolean done = false;
@@ -35,7 +35,7 @@ public class Ai {
         for (int j=0;j<cols.length;j++)
             if (cols[j]>cols[x])
                 x = j;
-        System.out.println(Arrays.toString(cols));
+        //System.out.println(Arrays.toString(cols));
         while (i < 6 && !done){
             if (board[i][x] == 0){
 		board[i][x] = player;
@@ -98,7 +98,7 @@ public class Ai {
 		geth++;
 		blockh++;
 		
-		System.out.println("gv/bv/gh/bh/pos:"+getv+blockv+geth+blockh+xcor+". ");
+		//System.out.println("gv/bv/gh/bh/pos:"+getv+blockv+geth+blockh+xcor+". ");
 		cols[xcor] = geth+blockh+getv+blockv+(.1*(6-Math.abs(xcor-3)));//replace this with sensical things
 	    }
 	}

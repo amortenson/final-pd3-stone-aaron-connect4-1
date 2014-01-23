@@ -11,6 +11,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     private int[][] board = new int[6][7];
     private Container buttons,buttons2;
     private JButton b1,b2,b3,b4,b5,b6,b7;
+    private boolean won = false;
     private boolean turn = true;
     private boolean useAi = false;
     private JLabel singlePlayer,gameInfo;
@@ -72,41 +73,83 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     }
     
     public void buttonAct(Object jb, String t){
-        int p;
-        if (turn)
-            p = 1;
-        else
-            p = 2;
-        System.out.println("player " + p + " picked column " + t);
-        int x = Integer.parseInt(t)-1;
-        int i = 0;
-        boolean done = false;
-        while (i < 6 && !done){
-            if (board[i][x] == 0){
-                if (turn){
-                    board[i][x] = 1;
-                    done = true;
-                }
-                else{
-                    board[i][x] = 2;
-                    done = true;
-                }
-            }
-            else
-                i++;
-        }
-        if (done) {
-            changeTurn();
-            updateBoard();
-            if (useAi) {
-                Ai a =new Ai(board,turn);
-                board =a.dummy();
-                changeTurn();
-                updateBoard();
-            }
-        }
-        else
-            System.out.println("Invalid move. Column full.");
+	if (won){
+	    System.out.println("The game is already over");
+	}
+	else{
+	    int p;
+	    if (turn)
+		p = 1;
+	    else
+		p = 2;
+	    System.out.println("player " + p + " picked column " + t);
+	    int x = Integer.parseInt(t)-1;
+	    int i = 0;
+	    boolean done = false;
+	    while (i < 6 && !done){
+		if (board[i][x] == 0){
+		    if (turn){
+			board[i][x] = 1;
+			done = true;
+		    }
+		    else{
+			board[i][x] = 2;
+			done = true;
+		    }
+		}
+		else
+		    i++;
+	    }
+	    if (done) {
+		winCheck();
+		changeTurn();
+		updateBoard();
+		if (useAi && !won) {
+		    Ai a =new Ai(board,turn);
+		    board =a.dummy();
+		    winCheck();
+		    changeTurn();
+		    updateBoard();
+		}
+	    }
+	    else
+		System.out.println("Invalid move. Column full.");
+	}
+    }
+
+    public void winCheck(){
+	for (int j = 5; j >= 0; j--){
+	    for (int i = 0; i < 4; i++){
+		if (board[j][i] != 0 &&  ((board[j][i]==board[j][i+1]) && (board[j][i]==board[j][i+2]) && (board[j][i]==board[j][i+3]))       )
+		    won = true;		    		
+	    }
+	}
+	for (int j = 5; j >= 3; j--){
+	    for (int i = 0; i < 7; i++){
+		if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i]) && (board[j][i]==board[j-2][i]) && (board[j][i]==board[j-3][i]))       )
+		    won = true;
+	    } 
+	}
+	for (int j = 5; j >= 3; j--){
+	    for (int i = 0; i < 4; i++){
+		if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i+1]) && (board[j][i]==board[j-2][i+2]) && (board[j][i]==board[j-3][i+3]))       )
+		    won = true;
+	    } 
+	}
+	for (int j = 5; j >= 3; j--){
+	    for (int i = 3; i < 7; i++){
+		if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i-1]) && (board[j][i]==board[j-2][i-2]) && (board[j][i]==board[j-3][i-3]))       )
+		    won = true;
+	    } 
+	}
+	if (won){
+	    int pl;
+	    if (turn)
+		pl = 1;
+	    else
+		pl = 2;
+	    System.out.println("Game over. " + pl + " has won!");
+	}
     }
     
     public Gui() {
