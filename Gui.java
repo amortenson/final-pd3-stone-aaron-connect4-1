@@ -14,20 +14,19 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     private boolean won = false;
     private boolean turn = true;
     private boolean useAi = false;
-    private JLabel singlePlayer,gameInfo;
+    private JLabel singlePlayer,gameInfo,gameStatus;
 
     public void changeTurn() {
         turn = !turn;
         if (turn)
-            this.gameInfo.setText("Red to Play");
+            this.gameInfo.setText("Red to play");
         else
-            this.gameInfo.setText("Black to Play");
+            this.gameInfo.setText("Black to play");
     }
     
     private class myKeyListener implements KeyListener {
         public void keyPressed(KeyEvent e) {
             System.out.println("button");
-            //fill in some box
         }
         
         public void keyTyped(KeyEvent e) {
@@ -36,6 +35,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         public void keyReleased(KeyEvent e) {
             System.out.println("potato");
         }
+	
     }
         
     public void actionPerformed(ActionEvent e) {        
@@ -74,15 +74,15 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     
     public void buttonAct(Object jb, String t){
 	if (won){
-	    System.out.println("The game is already over");
+	    System.out.println("The game is already over.");
 	}
 	else{
-	    int p;
+	    String p;
 	    if (turn)
-		p = 1;
+		p = "Red";
 	    else
-		p = 2;
-	    System.out.println("player " + p + " picked column " + t);
+		p = "Black";
+	    System.out.println(p + " picked column " + t);
 	    int x = Integer.parseInt(t)-1;
 	    int i = 0;
 	    boolean done = false;
@@ -143,18 +143,19 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	    } 
 	}
 	if (won){
-	    int pl;
+	    String pl;
 	    if (turn)
-		pl = 1;
+		pl = "Red";
 	    else
-		pl = 2;
+		pl = "Black";
 	    System.out.println("Game over. " + pl + " has won!");
+	    this.gameStatus.setText("GAME OVER: " + pl + " wins!" );
 	}
     }
     
     public Gui() {
-        this.setTitle("My first GUI");
-        this.setSize(725,725);
+        this.setTitle("Connect 4 by Aaron Mortenson and Stone Moore");
+        this.setSize(750,750);
         this.setLocation(0,0);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
@@ -174,11 +175,13 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         b6= new JButton("6");
         b7= new JButton("7");
         singlePlayer = new JLabel("Singleplayer OFF");
-        gameInfo = new JLabel("Red to Play");
+        gameInfo = new JLabel("Red to play");
+	gameStatus = new JLabel(" ");
         buttons = new Container();
         buttons.setLayout(new GridLayout(1,4));
         buttons.add(exitButton);
         buttons.add(gameInfo);
+	buttons.add(gameStatus);
         buttons.add(singlePlayer);
         buttons.add(aiToggle);
         buttonsBorder = new JPanel();
