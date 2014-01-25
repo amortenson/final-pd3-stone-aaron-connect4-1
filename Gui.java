@@ -155,7 +155,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     
     public Gui() {
         this.setTitle("Connect 4 by Aaron Mortenson and Stone Moore");
-        this.setSize(750,750);
+        this.setSize(725,725);
         this.setLocation(0,0);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
