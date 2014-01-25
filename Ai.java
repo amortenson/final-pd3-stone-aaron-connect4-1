@@ -202,7 +202,7 @@ public class Ai {
 		    int[] diag2up= new int[Math.min(3,Math.min(6-xcor,ycor+1))+Math.min(3,Math.min(xcor,4-ycor))+1];//notd2,gived2
 		    for (int i = -1*Math.min(3,Math.min(xcor,4-ycor));i<=Math.min(3,Math.min(6-xcor,ycor+1));i++) 
 			diag2up[i+Math.min(3,Math.min(xcor,4-ycor))] = board[ycor+1-i][xcor+i];
-		    System.out.println(Arrays.toString(diag2up));
+		    //System.out.println(Arrays.toString(diag2up));
 		    for (int i = 0;i<diag2up.length-3;i++) {
 			int tempnd2 = 0;
 			int tempgvd2 = 0;
@@ -224,8 +224,8 @@ public class Ai {
 		    gived2++;
 		}
 	    
-		System.out.println("gv/bv/gh/bh/gvh/nh/gd1/bd1/gvd1/nd1/gd2/bd2/gvd2/nd2/pos:");
-		System.out.println(""+getv+blockv+geth+blockh+giveh+noth+getd1+blockd1+gived1+notd1+getd2+blockd2+gived2+notd2+xcor+". ");
+		//System.out.println("gv/bv/gh/bh/gvh/nh/gd1/bd1/gvd1/nd1/gd2/bd2/gvd2/nd2/pos:");
+		//System.out.println(""+getv+blockv+geth+blockh+giveh+noth+getd1+blockd1+gived1+notd1+getd2+blockd2+gived2+notd2+xcor+". ");
 		cols[xcor] = .1*(6-Math.abs(xcor-3));
 		cols[xcor] += Math.pow(getv+.003,5)/64;	  
 		cols[xcor] += Math.pow(geth+.003,2);
