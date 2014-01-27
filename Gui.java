@@ -16,6 +16,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     private boolean won = false;
     private boolean turn = true;
     private boolean useAi = false;
+    private boolean go = true;
     private JLabel singlePlayer,gameInfo,gameStatus;
     private Image redslot,blackslot,blueslot;
 
@@ -45,6 +46,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         if (e.getSource() == resetButton) {
 	    turn = true;
             won = false;
+	    go = false;
 	    for (int i=0; i<6; i++)
 		for (int j=0; j<7; j++)
 		    board[i][j] = 0;
@@ -103,52 +105,57 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         if (won){
             System.out.println("The game is already over.");
         }
-        else{
-            String p;
-            if (turn)
-                p = "Red";
-            else
-                p = "Black";
-            System.out.println(p + " picked column " + t);
-            int x = Integer.parseInt(t)-1;
-            int i = 0;
-            boolean done = false;
-            while (i < 6 && !done){
-                if (board[i][x] == 0){
-                    if (turn){
-                        board[i][x] = 1;
-                        done = true;
-                    }
-                    else{
-                        board[i][x] = 2;
-                        done = true;
-                    }
+	boolean done = false;
+	if (go){
+	    String p;
+	    if (turn)
+		p = "Red";
+	    else
+		p = "Black";
+	    System.out.println(p + " picked column " + t);
+	    int x = Integer.parseInt(t)-1;
+	    int i = 0;	
+	    while (i < 6 && !done){
+		if (board[i][x] == 0){
+		    if (turn){
+			board[i][x] = 1;
+			done = true;
+		    }
+		    else{
+			board[i][x] = 2;
+			done = true;
+		    }
                 }
-                else
-                    i++;
-            }
-            if (done) {
-                winCheck();
-                changeTurn();
-                updateBoard();
-                if (useAi && !won) {
-		    java.util.Timer timer = new java.util.Timer();
-		    timer.schedule(new TimerTask() {
-			    @Override
-			    public void run() {
-				Ai a =new Ai(board,turn);
-				board =a.dummy();
-				winCheck();
-				changeTurn();
-				updateBoard();
-			    }
-			}, 1000);
-                }
-            }
-            else
-                System.out.println("Invalid move. Column full.");
-        }
+		else
+		    i++;
+	    }
+	}
+	if (!done || !go)
+	    System.out.println("Invalid move.");
+	else if (done && go) {
+	    winCheck();
+	    changeTurn();
+	    updateBoard();
+	    go = false;
+	    if (useAi && !won) {
+		java.util.Timer timer = new java.util.Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+			    go = false;
+			    Ai a =new Ai(board,turn);
+			    board =a.dummy();
+			    winCheck();
+			    changeTurn();
+			    updateBoard();
+			    go = true;
+			}
+		    }, 1000);		    
+	    }
+	}
+	
     }
+
 
     public void winCheck(){
         for (int j = 5; j >= 0; j--){
