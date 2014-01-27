@@ -15,7 +15,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     private JButton b1,b2,b3,b4,b5,b6,b7;
     private boolean won = false;
     private boolean turn = true;
-    private boolean useAi = false;
+    private int useAi = 0;
     private boolean go = true;
     private JLabel singlePlayer,gameInfo,gameStatus;
     private Image redslot,blackslot,blueslot;
@@ -46,7 +46,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         if (e.getSource() == resetButton) {
 	    turn = true;
             won = false;
-	    go = false;
+	    go = true;
 	    for (int i=0; i<6; i++)
 		for (int j=0; j<7; j++)
 		    board[i][j] = 0;
@@ -69,11 +69,17 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	    System.out.println("New game started.");
         }
         else if (e.getSource() == aiToggle) {
-            useAi = !useAi;
-            if (useAi) 
-                this.singlePlayer.setText("Singleplayer ON");
-            else
+            useAi++;
+	    if (useAi == 4)
+		useAi=0;
+            if (useAi == 0) 
                 this.singlePlayer.setText("Singleplayer OFF");
+            else if (useAi == 1)
+                this.singlePlayer.setText("Singleplayer EASY");
+	    else if (useAi == 2)
+                this.singlePlayer.setText("Singleplayer MEDIUM");
+	    else if (useAi == 3)
+                this.singlePlayer.setText("Singleplayer HARD");
         }
         else{
             buttonAct(e.getSource(), ((JButton) e.getSource()).getText());
@@ -137,18 +143,36 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
 	    changeTurn();
 	    updateBoard();
 	    go = false;
-	    if (useAi && !won) {
+	    if (useAi != 0 && !won) {
 		java.util.Timer timer = new java.util.Timer();
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 			    go = false;
-			    Ai a =new Ai(board,turn);
-			    board =a.dummy();
-			    winCheck();
-			    changeTurn();
-			    updateBoard();
-			    go = true;
+			    if (useAi == 1){
+				AiEz a = new AiEz(board,turn);
+				board =a.dummy();
+				winCheck();
+				changeTurn();
+				updateBoard();
+				go = true;
+			    }
+			    else if (useAi == 2){
+				AiMed a = new AiMed(board,turn);
+				board =a.dummy();
+				winCheck();
+				changeTurn();
+				updateBoard();
+				go = true;
+			    }
+			    else if (useAi == 3){
+				AiHard a = new AiHard(board,turn);
+				board =a.dummy();
+				winCheck();
+				changeTurn();
+				updateBoard();
+				go = true;
+			    } 
 			}
 		    }, 1000);		    
 	    }
@@ -195,7 +219,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     
     public Gui() {
         this.setTitle("Connect 4 by Aaron Mortenson and Stone Moore");
-        this.setSize(725,725);
+        this.setSize(750,750);
         this.setLocation(0,0);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         try {                

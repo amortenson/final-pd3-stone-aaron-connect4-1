@@ -1,14 +1,14 @@
 import java.util.*;
 import java.math.*;
 
-public class Ai {
+public class AiHard {
     public int[][] board;
     public int player,other;//true=1=red; false=2=black
     public int getv,geth,getd1,getd2,blockv,blockh,blockd1,blockd2,noth,notd1,notd2,giveh,gived1,gived2; 
     
     //not=don't let block, give = don't let get
 
-    public Ai (int[][] in, boolean turn) {
+    public AiHard (int[][] in, boolean turn) {
         board = in;
         if (turn) {
 	    player = 1;
