@@ -63,6 +63,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
             for (int j=0;j<board[i].length;j++) {
                 JPanel jpanel = new JPanel();
 		JLabel thumb = new JLabel();
+		jpanel.setBackground(Color.yellow);
 		ImageIcon icon = new ImageIcon(blueslot); 
                 if (board[i][j] == 1)
 		    icon = new ImageIcon(redslot); 
@@ -209,6 +210,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         buttons2.add(b6);
         buttons2.add(b7);
         buttonsBorder.add(buttons2);
+	boardBorder.setBackground(Color.yellow);
         pane.add(buttons,BorderLayout.PAGE_START);
         pane.add(boardBorder,BorderLayout.CENTER);
         pane.add(buttonsBorder,BorderLayout.PAGE_END);
@@ -217,6 +219,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
                 JPanel jpanel = new JPanel();
 		JLabel thumb = new JLabel();
 		ImageIcon icon = new ImageIcon(blueslot); 
+		jpanel.setBackground(Color.yellow);
                 jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
 		thumb.setIcon(icon);
                 jpanel.add(thumb);
