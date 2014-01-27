@@ -1,7 +1,9 @@
 import javax.swing.*;
+import javax.imageio.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
 
 public class Gui extends JFrame implements ActionListener {  //this code began as the sample gui code. Thanks, Mr. Z!
     
@@ -15,6 +17,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     private boolean turn = true;
     private boolean useAi = false;
     private JLabel singlePlayer,gameInfo,gameStatus;
+    private Image redslot,blackslot,blueslot;
 
     public void changeTurn() {
         turn = !turn;
@@ -35,7 +38,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         public void keyReleased(KeyEvent e) {
             System.out.println("potato");
         }
-	
+        
     }
         
     public void actionPerformed(ActionEvent e) {        
@@ -59,98 +62,100 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         for (int i=board.length-1;i>=0;i--) {
             for (int j=0;j<board[i].length;j++) {
                 JPanel jpanel = new JPanel();
-                jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
+		JLabel thumb = new JLabel();
+		ImageIcon icon = new ImageIcon(blueslot); 
                 if (board[i][j] == 1)
-                    jpanel.setBackground(Color.red);
-                else  if (board[i][j] == 2)
-                    jpanel.setBackground(Color.black);
-                else
-                    jpanel.setBackground(Color.blue);
-                boardBorder.add(jpanel);
+		    icon = new ImageIcon(redslot); 
+                if (board[i][j] == 2)
+		    icon = new ImageIcon(blackslot); 
+                jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
+		thumb.setIcon(icon);
+                jpanel.add(thumb);
+                boardBorder.add(jpanel); 
             }
         }
         boardBorder.revalidate();
     }
     
     public void buttonAct(Object jb, String t){
-	if (won){
-	    System.out.println("The game is already over.");
-	}
-	else{
-	    String p;
-	    if (turn)
-		p = "Red";
-	    else
-		p = "Black";
-	    System.out.println(p + " picked column " + t);
-	    int x = Integer.parseInt(t)-1;
-	    int i = 0;
-	    boolean done = false;
-	    while (i < 6 && !done){
-		if (board[i][x] == 0){
-		    if (turn){
-			board[i][x] = 1;
-			done = true;
-		    }
-		    else{
-			board[i][x] = 2;
-			done = true;
-		    }
-		}
-		else
-		    i++;
-	    }
-	    if (done) {
-		winCheck();
-		changeTurn();
-		updateBoard();
-		if (useAi && !won) {
-		    Ai a =new Ai(board,turn);
-		    board =a.dummy();
-		    winCheck();
-		    changeTurn();
-		    updateBoard();
-		}
-	    }
-	    else
-		System.out.println("Invalid move. Column full.");
-	}
+        if (won){
+            System.out.println("The game is already over.");
+        }
+        else{
+            String p;
+            if (turn)
+                p = "Red";
+            else
+                p = "Black";
+            System.out.println(p + " picked column " + t);
+            int x = Integer.parseInt(t)-1;
+            int i = 0;
+            boolean done = false;
+            while (i < 6 && !done){
+                if (board[i][x] == 0){
+                    if (turn){
+                        board[i][x] = 1;
+                        done = true;
+                    }
+                    else{
+                        board[i][x] = 2;
+                        done = true;
+                    }
+                }
+                else
+                    i++;
+            }
+            if (done) {
+                winCheck();
+                changeTurn();
+                updateBoard();
+                if (useAi && !won) {
+                    Ai a =new Ai(board,turn);
+                    board =a.dummy();
+                    winCheck();
+                    changeTurn();
+                    updateBoard();
+                }
+            }
+            else
+                System.out.println("Invalid move. Column full.");
+        }
     }
 
     public void winCheck(){
-	for (int j = 5; j >= 0; j--){
-	    for (int i = 0; i < 4; i++){
-		if (board[j][i] != 0 &&  ((board[j][i]==board[j][i+1]) && (board[j][i]==board[j][i+2]) && (board[j][i]==board[j][i+3]))       )
-		    won = true;		    		
-	    }
-	}
-	for (int j = 5; j >= 3; j--){
-	    for (int i = 0; i < 7; i++){
-		if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i]) && (board[j][i]==board[j-2][i]) && (board[j][i]==board[j-3][i]))       )
-		    won = true;
-	    } 
-	}
-	for (int j = 5; j >= 3; j--){
-	    for (int i = 0; i < 4; i++){
-		if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i+1]) && (board[j][i]==board[j-2][i+2]) && (board[j][i]==board[j-3][i+3]))       )
-		    won = true;
-	    } 
-	}
-	for (int j = 5; j >= 3; j--){
-	    for (int i = 3; i < 7; i++){
-		if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i-1]) && (board[j][i]==board[j-2][i-2]) && (board[j][i]==board[j-3][i-3]))       )
-		    won = true;
-	    } 
-	}
-	if (won){
-	    String pl;
-	    if (turn)
-		pl = "Red";
-	    else
-		pl = "Black";
-	    System.out.println("Game over. " + pl + " has won!");
-	    this.gameStatus.setText("GAME OVER: " + pl + " wins!" );
-	}
+        for (int j = 5; j >= 0; j--){
+            for (int i = 0; i < 4; i++){
+                if (board[j][i] != 0 &&  ((board[j][i]==board[j][i+1]) && (board[j][i]==board[j][i+2]) && (board[j][i]==board[j][i+3]))       )
+                    won = true;                                    
+            }
+        }
+        for (int j = 5; j >= 3; j--){
+            for (int i = 0; i < 7; i++){
+                if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i]) && (board[j][i]==board[j-2][i]) && (board[j][i]==board[j-3][i]))       )
+                    won = true;
+            } 
+        }
+        for (int j = 5; j >= 3; j--){
+            for (int i = 0; i < 4; i++){
+                if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i+1]) && (board[j][i]==board[j-2][i+2]) && (board[j][i]==board[j-3][i+3]))       )
+                    won = true;
+            } 
+        }
+        for (int j = 5; j >= 3; j--){
+            for (int i = 3; i < 7; i++){
+                if (board[j][i] != 0 &&  ((board[j][i]==board[j-1][i-1]) && (board[j][i]==board[j-2][i-2]) && (board[j][i]==board[j-3][i-3]))       )
+                    won = true;
+            } 
+        }
+        if (won){
+            String pl;
+            if (turn)
+                pl = "Red";
+            else
+                pl = "Black";
+            System.out.println("Game over. " + pl + " has won!");
+            this.gameStatus.setText("GAME OVER: " + pl + " wins!" );
+        }
     }
     
     public Gui() {
@@ -158,7 +163,14 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         this.setSize(725,725);
         this.setLocation(0,0);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
+        try {                
+          redslot = ImageIO.read(new File("images/red2.jpg"));
+          blackslot = ImageIO.read(new File("images/black2.jpg"));
+	  blueslot = ImageIO.read(new File("images/blue2.jpg"));
+
+       } catch (IOException ex) {
+            // lolololol
+       }
         pane = this.getContentPane();
         pane.setLayout(new BorderLayout());
         exitButton = new JButton("Exit");
@@ -176,12 +188,12 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         b7= new JButton("7");
         singlePlayer = new JLabel("Singleplayer OFF");
         gameInfo = new JLabel("Red to play");
-	gameStatus = new JLabel(" ");
+        gameStatus = new JLabel(" ");
         buttons = new Container();
         buttons.setLayout(new GridLayout(1,4));
         buttons.add(exitButton);
         buttons.add(gameInfo);
-	buttons.add(gameStatus);
+        buttons.add(gameStatus);
         buttons.add(singlePlayer);
         buttons.add(aiToggle);
         buttonsBorder = new JPanel();
@@ -203,8 +215,11 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         for (int[] panels:board) {
             for (int panel:panels) {
                 JPanel jpanel = new JPanel();
+		JLabel thumb = new JLabel();
+		ImageIcon icon = new ImageIcon(blueslot); 
                 jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
-                jpanel.setBackground(Color.blue);
+		thumb.setIcon(icon);
+                jpanel.add(thumb);
                 boardBorder.add(jpanel);
             }
         }
