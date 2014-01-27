@@ -8,7 +8,7 @@ import java.util.*;
 public class Gui extends JFrame implements ActionListener {  //this code began as the sample gui code. Thanks, Mr. Z!
     
     private Container pane;
-    private JButton exitButton,aiToggle;
+    private JButton resetButton,aiToggle;
     private JPanel buttonsBorder,boardBorder;
     private int[][] board = new int[6][7];
     private Container buttons,buttons2;
@@ -42,8 +42,29 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
     }
         
     public void actionPerformed(ActionEvent e) {        
-        if (e.getSource() == exitButton) {
-            System.exit(0);
+        if (e.getSource() == resetButton) {
+	    turn = true;
+            won = false;
+	    for (int i=0; i<6; i++)
+		for (int j=0; j<7; j++)
+		    board[i][j] = 0;
+	    boardBorder.removeAll();
+	    for (int x=board.length-1;x>=0;x--) {
+		for (int y=0;y<board[x].length;y++) {
+		    JPanel jpanel = new JPanel();
+		    JLabel thumb = new JLabel();
+		    jpanel.setBackground(Color.yellow);
+		    ImageIcon icon = new ImageIcon(blueslot);
+		    jpanel.setBorder(BorderFactory.createLineBorder(Color.yellow,2));
+		    thumb.setIcon(icon);
+		    jpanel.add(thumb);
+		    boardBorder.add(jpanel); 
+		}
+	    }
+	    boardBorder.revalidate();
+	    this.gameInfo.setText("Red to play");
+	    this.gameStatus.setText("");
+	    System.out.println("New game started.");
         }
         else if (e.getSource() == aiToggle) {
             useAi = !useAi;
@@ -75,7 +96,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
                 boardBorder.add(jpanel); 
             }
         }
-        boardBorder.revalidate();
+        boardBorder.revalidate();	
     }
     
     public void buttonAct(Object jb, String t){
@@ -110,6 +131,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
                 winCheck();
                 changeTurn();
                 updateBoard();
+		
                 if (useAi && !won) {
                     Ai a =new Ai(board,turn);
                     board =a.dummy();
@@ -174,7 +196,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
        }
         pane = this.getContentPane();
         pane.setLayout(new BorderLayout());
-        exitButton = new JButton("Exit");
+        resetButton = new JButton("Reset");
         aiToggle = new JButton("Toggle Singleplayer");
         boardBorder = new JPanel();
         boardBorder.setBorder(BorderFactory.createLineBorder(Color.yellow,5));
@@ -192,7 +214,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
         gameStatus = new JLabel(" ");
         buttons = new Container();
         buttons.setLayout(new GridLayout(1,4));
-        buttons.add(exitButton);
+        buttons.add(resetButton);
         buttons.add(gameInfo);
         buttons.add(gameStatus);
         buttons.add(singlePlayer);
@@ -227,7 +249,7 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
             }
         }
         
-        exitButton.addActionListener(this);
+        resetButton.addActionListener(this);
         aiToggle.addActionListener(this);
         b1.addActionListener(this);
         b2.addActionListener(this);
