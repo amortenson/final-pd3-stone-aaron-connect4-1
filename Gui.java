@@ -131,13 +131,18 @@ public class Gui extends JFrame implements ActionListener {  //this code began a
                 winCheck();
                 changeTurn();
                 updateBoard();
-		
                 if (useAi && !won) {
-                    Ai a =new Ai(board,turn);
-                    board =a.dummy();
-                    winCheck();
-                    changeTurn();
-                    updateBoard();
+		    java.util.Timer timer = new java.util.Timer();
+		    timer.schedule(new TimerTask() {
+			    @Override
+			    public void run() {
+				Ai a =new Ai(board,turn);
+				board =a.dummy();
+				winCheck();
+				changeTurn();
+				updateBoard();
+			    }
+			}, 1000);
                 }
             }
             else
