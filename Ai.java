@@ -241,9 +241,18 @@ public class Ai {
 		cols[xcor] -= Math.pow(noth,2);
 		cols[xcor] -= Math.pow(notd1,2);
 		cols[xcor] -= Math.pow(notd2,2);
+		//hardcoded situations, just to be sure:
+		if ((noth==3 || notd1==3 || notd2==3)&&(geth==3 || getd1==3 || getd2==3)) //(probably) forces a win the next turn
+		    cols[xcor] = 999;
+		if (giveh==4 || gived1==4 || gived2==4)//this would be giving away a win
+		    cols[xcor] = -999;
+		if (blockv==4 || blockh==4 || blockd1==4 || blockd2==4)//prevents you from winning the next turn
+		    cols[xcor] = 9999;
+		if (getv==4 || geth==4 || getd1==4 || getd2==4)//any winning move
+		    cols[xcor] = 99999;
 	    }
 	    else
-		cols[xcor] = -999;
+		cols[xcor] = -9999;//to prevent playing in a full column
 	}
 	return cols;
     }
